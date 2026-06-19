@@ -1,0 +1,34 @@
+[
+  {
+    "id": 1,
+    "title": "Modern Villa in Maitama",
+    "price": "₦450,000,000",
+    "location": "12 Lake Chad Crescent, Maitama, Abuja",
+    "bedrooms": 5,
+    "bathrooms": 4,
+    "sqft": "4,200",
+    "image": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&q=80",
+      "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=600&q=80"
+    ],
+    "status": "available",
+    "description": "A stunning modern villa with panoramic views and a private pool."
+  },
+  {
+    "id": 2,
+    "title": "Penthouse in Wuse 2",
+    "price": "₦280,000,000",
+    "location": "88 Aminu Kano Crescent, Wuse 2, Abuja",
+    "bedrooms": 3,
+    "bathrooms": 3,
+    "sqft": "2,850",
+    "image": "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=600&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=600&q=80",
+      "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=600&q=80"
+    ],
+    "status": "sold",
+    "description": "Luxurious penthouse with 360-degree city views."
+  }
+]
