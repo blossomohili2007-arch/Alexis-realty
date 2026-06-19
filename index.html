@@ -1,266 +1,619 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Alexis Impact Realty | Abuja Luxury</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <style>
-    /* ---------- RESET & VARIABLES (CHAMPAGNE & IVORY) ---------- */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    :root {
-      --bg-primary: #FCF9F5; --bg-secondary: #F5F0EB; --bg-card: #FFFFFF;
-      --text-primary: #1C1C1E; --text-muted: #5A5A5E;
-      --accent-gold: #C8A254; --accent-gold-dark: #A8873D;
-      --shadow-soft: 0 20px 60px rgba(0, 0, 0, 0.06), 0 8px 20px rgba(200, 162, 84, 0.08);
-      --shadow-gold: 0 8px 32px rgba(200, 162, 84, 0.25);
-    }
-    html { scroll-behavior: smooth; }
-    body { font-family: 'Inter', sans-serif; background-color: var(--bg-primary); color: var(--text-primary); line-height: 1.6; overflow-x: hidden; margin: 0; }
-    a { text-decoration: none; color: inherit; }
-    img { max-width: 100%; display: block; }
-    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
-    .section-label { display: inline-block; font-size: 0.7rem; letter-spacing: 4px; text-transform: uppercase; color: var(--accent-gold); font-weight: 600; margin-bottom: 8px; border-left: 3px solid var(--accent-gold); padding-left: 12px; }
-    h1, h2, h3 { font-family: 'Playfair Display', serif; font-weight: 700; }
-    h2 { font-size: 2.6rem; margin-bottom: 12px; }
-    .subtitle { color: var(--text-muted); font-weight: 300; max-width: 600px; }
-
-    /* Whatsapp Float */
-    .whatsapp-float { position: fixed; bottom: 28px; right: 28px; z-index: 999; background: #25D366; color: #fff; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4); transition: all 0.3s; }
-    .whatsapp-float:hover { transform: scale(1.1); color: #fff; }
-
-    /* Navigation */
-    nav { position: fixed; top: 0; left: 0; width: 100%; z-index: 999; padding: 18px 0; transition: all 0.4s ease; }
-    nav.scrolled { background: rgba(252, 249, 245, 0.92); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(200, 162, 84, 0.15); padding: 10px 0; box-shadow: 0 4px 30px rgba(0,0,0,0.03); }
-    .nav-container { display: flex; justify-content: space-between; align-items: center; }
-    .logo { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; letter-spacing: 1px; color: var(--text-primary); }
-    .logo span { color: var(--accent-gold); }
-    .nav-links { display: flex; gap: 36px; list-style: none; font-weight: 500; font-size: 0.9rem; }
-    .nav-links a { transition: color 0.3s; position: relative; color: var(--text-primary); }
-    .nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: var(--accent-gold); transition: width 0.3s; }
-    .nav-links a:hover { color: var(--accent-gold); }
-    .nav-links a:hover::after { width: 100%; }
-    .nav-cta { background: var(--accent-gold); color: #fff !important; padding: 8px 24px; border-radius: 50px; font-weight: 600; transition: all 0.3s; }
-    .nav-cta:hover { background: var(--accent-gold-dark); transform: scale(1.04); color: #fff !important; }
-    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
-    .hamburger span { display: block; width: 28px; height: 2.5px; background: var(--text-primary); transition: all 0.3s; }
-
-    /* Hero */
-    .hero { min-height: 100vh; display: flex; align-items: center; position: relative; background: url('https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1600&q=80') no-repeat center center/cover; isolation: isolate; }
-    .hero::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.25) 50%, rgba(0, 0, 0, 0.65) 100%); z-index: 1; }
-    .hero-content { position: relative; z-index: 2; max-width: 700px; padding: 40px 0; margin-top: 60px; }
-    .hero-content .tagline { font-size: 1rem; letter-spacing: 3px; color: var(--accent-gold); text-transform: uppercase; font-weight: 600; margin-bottom: 16px; text-shadow: 0 2px 20px rgba(0, 0, 0, 0.6); }
-    .hero-content h1 { font-size: 4.2rem; line-height: 1.1; margin-bottom: 20px; color: #FFFFFF; text-shadow: 0 4px 30px rgba(0, 0, 0, 0.7); }
-    .hero-content h1 span { color: var(--accent-gold); font-style: italic; text-shadow: 0 0 30px rgba(200, 162, 84, 0.3); }
-    .hero-content p { font-size: 1.2rem; color: rgba(255, 255, 255, 0.9); margin-bottom: 36px; max-width: 520px; text-shadow: 0 2px 15px rgba(0, 0, 0, 0.5); }
-    .btn-group { display: flex; flex-wrap: wrap; gap: 16px; }
-    .btn-primary { background: var(--accent-gold); color: #fff; padding: 16px 40px; border-radius: 50px; font-weight: 700; font-size: 1rem; transition: all 0.3s; display: inline-flex; align-items: center; gap: 12px; border: none; cursor: pointer; box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4); }
-    .btn-primary:hover { background: var(--accent-gold-dark); transform: translateY(-3px); box-shadow: 0 8px 35px rgba(200, 162, 84, 0.5); color: #fff; }
-    .btn-secondary { background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(12px); border: 1.5px solid rgba(255, 255, 255, 0.4); padding: 16px 40px; border-radius: 50px; font-weight: 600; transition: all 0.3s; display: inline-flex; align-items: center; gap: 12px; color: #FFFFFF; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
-    .btn-secondary:hover { border-color: var(--accent-gold); background: rgba(255, 255, 255, 0.25); transform: translateY(-3px); color: #FFFFFF; }
-    .hero-stats { display: flex; gap: 48px; margin-top: 48px; padding-top: 32px; border-top: 1px solid rgba(255, 255, 255, 0.2); }
-    .stat-item h3 { font-family: 'Inter', sans-serif; font-size: 1.8rem; font-weight: 700; color: var(--accent-gold); text-shadow: 0 2px 20px rgba(0, 0, 0, 0.4); }
-    .stat-item p { font-size: 0.75rem; color: rgba(255, 255, 255, 0.7); letter-spacing: 1px; text-transform: uppercase; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); }
-
-    /* Listings */
-    .listings { padding: 100px 0; background: var(--bg-primary); }
-    .listings-header { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; margin-bottom: 56px; }
-    .listings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
-    .listing-card { background: var(--bg-card); border-radius: 20px; overflow: hidden; transition: all 0.4s; border: 1px solid rgba(200, 162, 84, 0.1); cursor: pointer; box-shadow: var(--shadow-soft); position: relative; }
-    .listing-card:hover { transform: translateY(-12px); border-color: var(--accent-gold); box-shadow: 0 20px 60px rgba(200, 162, 84, 0.15); }
-    .listing-card .img-wrapper { height: 260px; overflow: hidden; position: relative; }
-    .listing-card .img-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s; }
-    .listing-card:hover .img-wrapper img { transform: scale(1.06); }
-    .listing-badge { position: absolute; top: 16px; left: 16px; background: var(--accent-gold); color: #fff; font-weight: 700; font-size: 0.7rem; padding: 4px 14px; border-radius: 50px; letter-spacing: 1px; text-transform: uppercase; }
-    .listing-badge.sold { background: #e74c3c; }
-    .listing-body { padding: 24px; }
-    .listing-body .price { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: var(--accent-gold); margin-bottom: 4px; }
-    .listing-body .address { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 16px; font-weight: 400; }
-    .listing-features { display: flex; gap: 20px; border-top: 1px solid rgba(0, 0, 0, 0.05); padding-top: 16px; font-size: 0.85rem; color: var(--text-muted); }
-    .listing-features i { color: var(--accent-gold); margin-right: 6px; width: 16px; }
-    .sold-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 2rem; font-weight: 700; letter-spacing: 5px; backdrop-filter: blur(4px); z-index: 5; }
-
-    /* About & Contact (same as before - shortened for brevity) */
-    .about { padding: 100px 0; background: var(--bg-secondary); border-top: 1px solid rgba(200, 162, 84, 0.1); border-bottom: 1px solid rgba(200, 162, 84, 0.1); }
-    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
-    .about-image { border-radius: 20px; overflow: hidden; position: relative; box-shadow: var(--shadow-soft); }
-    .about-image img { width: 100%; height: 500px; object-fit: cover; border-radius: 20px; }
-    .about-image .exp-badge { position: absolute; bottom: -20px; right: -20px; background: var(--accent-gold); color: #fff; padding: 24px 30px; border-radius: 16px; text-align: center; font-weight: 700; box-shadow: var(--shadow-gold); }
-    .about-image .exp-badge span { font-size: 2.2rem; display: block; font-family: 'Playfair Display', serif; }
-    .about-text h2 { margin-bottom: 16px; }
-    .about-text p { color: var(--text-muted); margin-bottom: 16px; }
-    .about-text i { color: var(--accent-gold); margin-right: 10px; }
-    .signature { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-style: italic; color: var(--accent-gold); margin-top: 16px; }
-
-    .contact { padding: 100px 0; background: var(--bg-primary); }
-    .contact-wrapper { display: grid; grid-template-columns: 1fr 1.2fr; gap: 60px; background: var(--bg-card); padding: 48px; border-radius: 30px; border: 1px solid rgba(200, 162, 84, 0.1); box-shadow: var(--shadow-soft); }
-    .contact-info h2 { margin-bottom: 12px; }
-    .contact-info p { color: var(--text-muted); margin-bottom: 32px; }
-    .contact-detail { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
-    .contact-detail i { width: 44px; height: 44px; background: rgba(200, 162, 84, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--accent-gold); font-size: 1.1rem; }
-    .contact-form input, .contact-form textarea { width: 100%; padding: 16px 20px; margin-bottom: 16px; background: var(--bg-secondary); border: 1px solid rgba(0, 0, 0, 0.05); border-radius: 12px; color: var(--text-primary); font-family: 'Inter', sans-serif; transition: border 0.3s; font-size: 1rem; }
-    .contact-form input:focus, .contact-form textarea:focus { outline: none; border-color: var(--accent-gold); background: #fff; }
-    .contact-form textarea { min-height: 120px; resize: vertical; }
-    .contact-form .btn-primary { width: 100%; justify-content: center; font-size: 1.1rem; }
-
-    footer { padding: 40px 0; border-top: 1px solid rgba(0, 0, 0, 0.04); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; color: var(--text-muted); }
-    .social-links { display: flex; gap: 20px; }
-    .social-links a { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(0, 0, 0, 0.06); transition: all 0.3s; color: var(--text-muted); background: #fff; }
-    .social-links a:hover { border-color: var(--accent-gold); color: var(--accent-gold); transform: translateY(-4px); box-shadow: var(--shadow-soft); }
-    footer p { color: var(--text-muted); font-size: 0.85rem; }
-
-    @media (max-width: 992px) { .about-grid { grid-template-columns: 1fr; } .about-image img { height: 380px; } .contact-wrapper { grid-template-columns: 1fr; padding: 32px; } }
-    @media (max-width: 768px) { .nav-links { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: var(--bg-card); flex-direction: column; padding: 24px; gap: 20px; border-bottom: 1px solid rgba(0,0,0,0.05); box-shadow: var(--shadow-soft); } .nav-links.open { display: flex; } .hamburger { display: flex; } .hero-content h1 { font-size: 2.8rem; } .hero-stats { gap: 24px; flex-wrap: wrap; } .listings-header { flex-direction: column; align-items: flex-start; gap: 12px; } h2 { font-size: 2rem; } .contact-wrapper { padding: 24px; } .about-image .exp-badge { position: static; margin-top: 16px; width: 100%; } footer { flex-direction: column; text-align: center; } }
-    @media (max-width: 480px) { .hero-content h1 { font-size: 2.2rem; } .btn-group { flex-direction: column; width: 100%; } .btn-primary, .btn-secondary { justify-content: center; width: 100%; } }
-    .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Alexis Impact Realty</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #FCF9F5; }
+        .login-container { max-width: 400px; margin: 100px auto; padding: 40px; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.1); text-align: center; }
+        .login-container h1 { font-size: 1.8rem; color: #1C1C1E; margin-bottom: 8px; }
+        .login-container h1 span { color: #C8A254; }
+        .login-container p { color: #5A5A5E; margin-bottom: 30px; }
+        input[type="password"] { width: 100%; padding: 16px; border: 1px solid #ddd; border-radius: 12px; font-size: 1rem; margin-bottom: 16px; }
+        .btn { background: #C8A254; color: white; padding: 16px 40px; border: none; border-radius: 50px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.3s; width: 100%; }
+        .btn:hover { background: #A8873D; transform: translateY(-2px); }
+        .error { color: #e74c3c; margin-top: 12px; display: none; }
+        .hidden { display: none; }
+        .dashboard { max-width: 1200px; margin: 40px auto; padding: 0 24px; }
+        .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 16px; }
+        .dashboard-header h2 { font-family: 'Playfair Display', serif; font-size: 2rem; }
+        .add-btn { background: #C8A254; color: white; padding: 12px 28px; border: none; border-radius: 50px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .add-btn:hover { background: #A8873D; transform: translateY(-2px); }
+        .property-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
+        .property-card { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.06); border: 1px solid rgba(200, 162, 84, 0.1); }
+        .property-card img { width: 100%; height: 200px; object-fit: cover; }
+        .property-card .info { padding: 16px; }
+        .property-card .info h3 { font-size: 1.1rem; margin-bottom: 4px; }
+        .property-card .info .price { color: #C8A254; font-weight: 700; font-size: 1.2rem; }
+        .property-card .info .location { color: #5A5A5E; font-size: 0.9rem; }
+        .property-card .actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+        .property-card .actions button { padding: 6px 16px; border: none; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 600; transition: all 0.3s; }
+        .edit-btn { background: #C8A254; color: white; }
+        .edit-btn:hover { background: #A8873D; }
+        .delete-btn { background: #e74c3c; color: white; }
+        .delete-btn:hover { background: #c0392b; }
+        .sold-badge { background: #e74c3c; color: white; padding: 2px 12px; border-radius: 50px; font-size: 0.7rem; font-weight: 700; display: inline-block; margin-left: 8px; }
+        .available-badge { background: #27ae60; color: white; padding: 2px 12px; border-radius: 50px; font-size: 0.7rem; font-weight: 700; display: inline-block; margin-left: 8px; }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 999; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+        .modal.open { display: flex; }
+        .modal-content { background: white; padding: 32px; border-radius: 20px; max-width: 650px; width: 95%; max-height: 90vh; overflow-y: auto; }
+        .modal-content h2 { margin-bottom: 20px; }
+        .modal-content input, .modal-content textarea, .modal-content select { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; }
+        .modal-content textarea { min-height: 80px; }
+        .modal-content .btn { width: auto; padding: 12px 32px; }
+        .modal-close { float: right; font-size: 2rem; cursor: pointer; color: #999; background: none; border: none; }
+        .modal-close:hover { color: #333; }
+        .status-msg { padding: 12px; border-radius: 8px; margin-bottom: 16px; display: none; }
+        .status-msg.success { display: block; background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .status-msg.error { display: block; background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        
+        /* Image Upload Styles */
+        .upload-area { border: 2px dashed #ddd; border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 12px; transition: all 0.3s; cursor: pointer; }
+        .upload-area:hover, .upload-area.dragover { border-color: #C8A254; background: #FCF9F5; }
+        .upload-area .icon { font-size: 2rem; color: #C8A254; }
+        .upload-area p { color: #5A5A5E; margin-top: 4px; font-size: 0.9rem; }
+        .upload-area .filename { color: #1C1C1E; font-weight: 600; margin-top: 4px; }
+        .upload-preview { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+        .upload-preview img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; }
+        .upload-preview .remove-btn { position: relative; margin-left: -20px; margin-top: -8px; background: #e74c3c; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-size: 0.7rem; }
+        .gallery-upload-area { border: 2px dashed #ddd; border-radius: 12px; padding: 16px; text-align: center; margin-bottom: 12px; transition: all 0.3s; cursor: pointer; }
+        .gallery-upload-area:hover, .gallery-upload-area.dragover { border-color: #C8A254; background: #FCF9F5; }
+        .gallery-preview { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+        .gallery-preview .gallery-item { position: relative; }
+        .gallery-preview .gallery-item img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; }
+        .gallery-preview .gallery-item .remove-btn { position: absolute; top: -8px; right: -8px; background: #e74c3c; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-size: 0.7rem; }
+        .upload-progress { width: 100%; height: 4px; background: #eee; border-radius: 4px; margin: 8px 0; display: none; overflow: hidden; }
+        .upload-progress .bar { height: 100%; background: #C8A254; width: 0%; border-radius: 4px; transition: width 0.3s; }
+        .upload-progress.active { display: block; }
+        
+        @media (max-width: 768px) { .dashboard-header { flex-direction: column; align-items: stretch; } }
+    </style>
 </head>
 <body>
 
-  <a href="https://wa.me/2347018133967" target="_blank" class="whatsapp-float" aria-label="Chat on WhatsApp"><i class="fab fa-whatsapp"></i></a>
-
-  <nav id="navbar">
-    <div class="container nav-container">
-      <div class="logo">ALEXIS IMPACT <span>REALTY</span></div>
-      <ul class="nav-links" id="navLinks">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="listings.html">Listings</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li><a href="#contact" class="nav-cta">Schedule a Tour</a></li>
-      </ul>
-      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    <!-- ========== LOGIN SCREEN ========== -->
+    <div id="loginScreen" class="login-container">
+        <h1>ALEXIS IMPACT <span>REALTY</span></h1>
+        <p>Enter admin password to manage properties</p>
+        <input type="password" id="passwordInput" placeholder="Enter password" onkeydown="if(event.key==='Enter') checkPassword()">
+        <button class="btn" onclick="checkPassword()">Access Dashboard</button>
+        <div id="errorMsg" class="error">❌ Incorrect password. Try again.</div>
     </div>
-  </nav>
 
-  <section class="hero" id="home">
-    <div class="container hero-content">
-      <p class="tagline"><i class="fas fa-crown" style="margin-right: 8px;"></i> Abuja's Premier Luxury Realty</p>
-      <h1>Where Legacy Meets <span>Luxury</span></h1>
-      <p>Curated estates, modern penthouses, and coastal retreats in the heart of Nigeria's capital.</p>
-      <div class="btn-group">
-        <a href="listings.html" class="btn-primary"><i class="fas fa-arrow-right"></i> Explore Properties</a>
-        <a href="#contact" class="btn-secondary"><i class="fas fa-phone-alt"></i> Get in Touch</a>
-      </div>
-      <div class="hero-stats">
-        <div class="stat-item"><h3>₦15B+</h3><p>Total Sales</p></div>
-        <div class="stat-item"><h3>200+</h3><p>Happy Clients</p></div>
-        <div class="stat-item"><h3>8</h3><p>Years of Excellence</p></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="listings" id="listings">
-    <div class="container">
-      <div class="listings-header">
-        <div>
-          <span class="section-label">Exclusive</span>
-          <h2>Featured Listings</h2>
-          <p class="subtitle">Handpicked luxury properties across Abuja's most prestigious neighborhoods.</p>
+    <!-- ========== DASHBOARD ========== -->
+    <div id="dashboard" class="dashboard hidden">
+        <div class="dashboard-header">
+            <h2>🏠 Property Manager</h2>
+            <button class="add-btn" onclick="openAddModal()">+ Add New Property</button>
         </div>
-        <a href="listings.html" style="color: var(--accent-gold); font-weight: 600;">View All <i class="fas fa-arrow-right"></i></a>
-      </div>
-      <div class="listings-grid" id="featuredGrid">
-        <!-- Dynamically loaded -->
-      </div>
+        <div id="statusMsg" class="status-msg"></div>
+        <div id="propertyGrid" class="property-grid"></div>
     </div>
-  </section>
 
-  <section class="about" id="about">
-    <div class="container about-grid">
-      <div class="about-image reveal">
-        <img src="agent.jpeg" alt="Agent">
-        <div class="exp-badge"><span>8+</span> Years of Excellence</div>
-      </div>
-      <div class="about-text reveal">
-        <span class="section-label">Meet Your Agent</span>
-        <h2>Luxury isn't just a price point—it's a <span style="color: var(--accent-gold);">feeling</span>.</h2>
-        <p>Alexis Impact Realty is the premier luxury real estate brand in Abuja, Nigeria. We specialize in high-end properties across Maitama, Asokoro, and Lugbe, offering white-glove service from viewing to handover.</p>
-        <p><i class="fas fa-check-circle"></i> 200+ successful transactions in Abuja</p>
-        <p><i class="fas fa-check-circle"></i> Top 1% of Realtors in the FCT</p>
-        <p><i class="fas fa-check-circle"></i> Personalized property tours & consultation</p>
-        <div class="signature">— Alexis Impact</div>
-      </div>
-    </div>
-  </section>
-
-  <section class="contact" id="contact">
-    <div class="container contact-wrapper">
-      <div class="contact-info reveal">
-        <span class="section-label">Get in Touch</span>
-        <h2>Let's Find Your <br><span style="color: var(--accent-gold);">Dream Property</span></h2>
-        <p>Whether you're buying, selling, or just exploring—reach out. We reply within 2 hours.</p>
-        <div class="contact-detail"><i class="fas fa-phone-alt"></i><div><strong>Phone</strong><br><span style="color: var(--text-muted);">+234 701 813 3967</span></div></div>
-        <div class="contact-detail"><i class="fas fa-envelope"></i><div><strong>Email</strong><br><span style="color: var(--text-muted);">rosellespark464@gmail.com</span></div></div>
-        <div class="contact-detail"><i class="fas fa-map-marker-alt"></i><div><strong>Office</strong><br><span style="color: var(--text-muted);">Maitama, Abuja, Nigeria</span></div></div>
-      </div>
-      <form class="contact-form reveal" action="#" method="POST">
-        <input type="text" placeholder="Your Name" required>
-        <input type="email" placeholder="Email Address" required>
-        <input type="text" placeholder="Phone Number">
-        <textarea placeholder="Tell me about your dream home in Abuja..." rows="4"></textarea>
-        <button type="submit" class="btn-primary"><i class="fas fa-paper-plane"></i> Send Message</button>
-        <p style="font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-top: 12px;">Your info is safe. No spam, ever.</p>
-      </form>
-    </div>
-  </section>
-
-  <div class="container"><footer>
-    <p>&copy; 2026 <strong>Alexis Impact Realty</strong>. All rights reserved. Abuja, Nigeria.</p>
-    <div class="social-links">
-      <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-      <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-      <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-      <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-    </div>
-  </footer></div>
-
-  <script>
-    // Fetch and display featured listings
-    async function loadFeatured() {
-      try {
-        const res = await fetch('listings.json');
-        const data = await res.json();
-        const available = data.filter(item => item.status !== 'sold').slice(0, 3);
-        const grid = document.getElementById('featuredGrid');
-        grid.innerHTML = available.map(item => `
-          <div class="listing-card" onclick="window.location.href='listings.html'">
-            <div class="img-wrapper">
-              <img src="${item.image}" alt="${item.title}">
-              <span class="listing-badge">Featured</span>
+    <!-- ========== ADD/EDIT MODAL ========== -->
+    <div id="propertyModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <h2 id="modalTitle">Add Property</h2>
+            
+            <input type="text" id="propTitle" placeholder="Title (e.g., Modern Villa in Maitama)">
+            <input type="text" id="propPrice" placeholder="Price (e.g., ₦450,000,000)">
+            <input type="text" id="propLocation" placeholder="Location (e.g., 12 Lake Chad Crescent, Maitama)">
+            <input type="number" id="propBedrooms" placeholder="Bedrooms">
+            <input type="number" id="propBathrooms" placeholder="Bathrooms">
+            <input type="text" id="propSqft" placeholder="Square Feet (e.g., 4,200)">
+            
+            <!-- MAIN IMAGE UPLOAD -->
+            <div style="margin-bottom: 12px;">
+                <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 4px;">Main Image</label>
+                <div class="upload-area" id="mainUploadArea" onclick="document.getElementById('mainImageInput').click()">
+                    <div class="icon">📸</div>
+                    <p>Click or drag & drop to upload main image</p>
+                    <div class="filename" id="mainFilename">No file selected</div>
+                </div>
+                <input type="file" id="mainImageInput" accept="image/*" style="display:none" onchange="handleMainImageUpload(event)">
+                <div id="mainPreview" class="upload-preview"></div>
+                <div class="upload-progress" id="mainProgress"><div class="bar" id="mainProgressBar"></div></div>
             </div>
-            <div class="listing-body">
-              <div class="price">${item.price}</div>
-              <div class="address">${item.location}</div>
-              <div class="listing-features">
-                <span><i class="fas fa-bed"></i> ${item.bedrooms} Beds</span>
-                <span><i class="fas fa-bath"></i> ${item.bathrooms} Baths</span>
-                <span><i class="fas fa-ruler-combined"></i> ${item.sqft} sqft</span>
-              </div>
+            
+            <!-- GALLERY IMAGES UPLOAD -->
+            <div style="margin-bottom: 12px;">
+                <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 4px;">Inside Tour Gallery</label>
+                <div class="gallery-upload-area" id="galleryUploadArea" onclick="document.getElementById('galleryImageInput').click()">
+                    <div class="icon">🖼️</div>
+                    <p>Click or drag & drop to upload multiple images</p>
+                    <div class="filename" id="galleryFilename">No files selected</div>
+                </div>
+                <input type="file" id="galleryImageInput" accept="image/*" multiple style="display:none" onchange="handleGalleryUpload(event)">
+                <div id="galleryPreview" class="gallery-preview"></div>
+                <div class="upload-progress" id="galleryProgress"><div class="bar" id="galleryProgressBar"></div></div>
             </div>
-          </div>
-        `).join('');
-      } catch (e) {
-        console.log("Loading default listings...");
-      }
-    }
-    loadFeatured();
+            
+            <select id="propStatus">
+                <option value="available">Available</option>
+                <option value="sold">Sold</option>
+            </select>
+            <textarea id="propDescription" placeholder="Description"></textarea>
+            
+            <button class="btn" onclick="saveProperty()">Save Property</button>
+        </div>
+    </div>
 
-    // Nav, Scroll, Reveal (same as before)
-    const hamburger = document.getElementById('hamburger');
-    const navLinks = document.getElementById('navLinks');
-    hamburger.addEventListener('click', () => { navLinks.classList.toggle('open'); });
-    document.querySelectorAll('.nav-links a').forEach(link => { link.addEventListener('click', () => { navLinks.classList.remove('open'); }); });
-    const navbar = document.getElementById('navbar');
-    window.addEventListener('scroll', () => { if (window.scrollY > 40) { navbar.classList.add('scrolled'); } else { navbar.classList.remove('scrolled'); } });
-    const reveals = document.querySelectorAll('.reveal');
-    const revealObserver = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); } }); }, { threshold: 0.15 });
-    reveals.forEach(el => revealObserver.observe(el));
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => { anchor.addEventListener('click', function(e) { const href = this.getAttribute('href'); if (href === '#') return; e.preventDefault(); const target = document.querySelector(href); if (target) { target.scrollIntoView({ behavior: 'smooth', block: 'start' }); } }); });
-  </script>
+    <script>
+        // =========================================
+        // CONFIGURATION - EDIT THESE!
+        // =========================================
+        const ADMIN_PASSWORD = "alexis2026";
+        
+        // GitHub Repo Info
+        const GITHUB_USERNAME = "YOUR_GITHUB_USERNAME"; // <--- CHANGE THIS
+        const GITHUB_REPO = "alexis-realty";
+        const GITHUB_FILE_PATH = "listings.json";
+        const GITHUB_BRANCH = "main";
+        
+        // GitHub Personal Access Token
+        const GITHUB_TOKEN = "YOUR_GITHUB_PERSONAL_ACCESS_TOKEN"; // <--- CHANGE THIS
+        // =========================================
+
+        let currentEditId = null;
+        let currentData = [];
+        let mainImageUrl = '';
+        let galleryUrls = [];
+
+        function checkPassword() {
+            const input = document.getElementById('passwordInput');
+            const error = document.getElementById('errorMsg');
+            if (input.value === ADMIN_PASSWORD) {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('dashboard').classList.remove('hidden');
+                loadProperties();
+            } else {
+                error.style.display = 'block';
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        function showStatus(msg, isError = false) {
+            const el = document.getElementById('statusMsg');
+            el.textContent = msg;
+            el.className = 'status-msg ' + (isError ? 'error' : 'success');
+            el.style.display = 'block';
+            setTimeout(() => { el.style.display = 'none'; }, 5000);
+        }
+
+        // ========== IMAGE UPLOAD TO GITHUB ==========
+        async function uploadImageToGitHub(file, folder = 'images') {
+            const timestamp = Date.now();
+            const filename = `${folder}/${timestamp}_${file.name.replace(/\s/g, '_')}`;
+            
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = async function(e) {
+                    try {
+                        const base64 = e.target.result.split(',')[1];
+                        
+                        const url = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${filename}`;
+                        const response = await fetch(url, {
+                            method: 'PUT',
+                            headers: {
+                                'Authorization': `token ${GITHUB_TOKEN}`,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                message: `Upload image: ${file.name}`,
+                                content: base64,
+                                branch: GITHUB_BRANCH
+                            })
+                        });
+                        
+                        if (!response.ok) {
+                            const errorData = await response.json();
+                            throw new Error(errorData.message || 'Upload failed');
+                        }
+                        
+                        const data = await response.json();
+                        // Return the raw URL
+                        const imageUrl = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/${GITHUB_BRANCH}/${filename}`;
+                        resolve(imageUrl);
+                    } catch (err) {
+                        reject(err);
+                    }
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // ========== MAIN IMAGE UPLOAD HANDLER ==========
+        async function handleMainImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            document.getElementById('mainFilename').textContent = '📤 Uploading...';
+            document.getElementById('mainProgress').classList.add('active');
+            document.getElementById('mainProgressBar').style.width = '30%';
+            
+            try {
+                const url = await uploadImageToGitHub(file, 'main');
+                mainImageUrl = url;
+                document.getElementById('mainProgressBar').style.width = '100%';
+                
+                // Show preview
+                const preview = document.getElementById('mainPreview');
+                preview.innerHTML = `<img src="${url}" alt="Main image"><span style="font-size:0.8rem; color:#27ae60;">✅ Uploaded</span>`;
+                document.getElementById('mainFilename').textContent = `✅ ${file.name}`;
+                
+                setTimeout(() => {
+                    document.getElementById('mainProgress').classList.remove('active');
+                    document.getElementById('mainProgressBar').style.width = '0%';
+                }, 500);
+            } catch (err) {
+                showStatus('❌ Main image upload failed: ' + err.message, true);
+                document.getElementById('mainFilename').textContent = '❌ Upload failed';
+                document.getElementById('mainProgress').classList.remove('active');
+            }
+        }
+
+        // ========== GALLERY IMAGES UPLOAD HANDLER ==========
+        async function handleGalleryUpload(event) {
+            const files = event.target.files;
+            if (!files.length) return;
+            
+            document.getElementById('galleryFilename').textContent = `📤 Uploading ${files.length} images...`;
+            document.getElementById('galleryProgress').classList.add('active');
+            
+            let uploaded = 0;
+            const total = files.length;
+            
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                try {
+                    document.getElementById('galleryProgressBar').style.width = `${((i) / total) * 100}%`;
+                    const url = await uploadImageToGitHub(file, 'gallery');
+                    galleryUrls.push(url);
+                    
+                    // Show preview
+                    const preview = document.getElementById('galleryPreview');
+                    const item = document.createElement('div');
+                    item.className = 'gallery-item';
+                    item.innerHTML = `
+                        <img src="${url}" alt="Gallery">
+                        <button class="remove-btn" onclick="removeGalleryImage('${url}')">×</button>
+                    `;
+                    preview.appendChild(item);
+                    
+                    uploaded++;
+                    document.getElementById('galleryProgressBar').style.width = `${((i + 1) / total) * 100}%`;
+                } catch (err) {
+                    showStatus(`❌ Failed to upload ${file.name}: ${err.message}`, true);
+                }
+            }
+            
+            document.getElementById('galleryProgressBar').style.width = '100%';
+            document.getElementById('galleryFilename').textContent = `✅ ${uploaded} images uploaded`;
+            
+            setTimeout(() => {
+                document.getElementById('galleryProgress').classList.remove('active');
+                document.getElementById('galleryProgressBar').style.width = '0%';
+            }, 500);
+            
+            // Reset input
+            event.target.value = '';
+        }
+
+        function removeGalleryImage(url) {
+            galleryUrls = galleryUrls.filter(u => u !== url);
+            const preview = document.getElementById('galleryPreview');
+            const items = preview.querySelectorAll('.gallery-item');
+            items.forEach(item => {
+                const img = item.querySelector('img');
+                if (img && img.src === url) {
+                    item.remove();
+                }
+            });
+            document.getElementById('galleryFilename').textContent = `📸 ${galleryUrls.length} images uploaded`;
+        }
+
+        // ========== DRAG AND DROP SUPPORT ==========
+        function setupDragDrop() {
+            const mainArea = document.getElementById('mainUploadArea');
+            const galleryArea = document.getElementById('galleryUploadArea');
+            
+            [mainArea, galleryArea].forEach(area => {
+                area.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    area.classList.add('dragover');
+                });
+                area.addEventListener('dragleave', () => {
+                    area.classList.remove('dragover');
+                });
+            });
+            
+            mainArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                area.classList.remove('dragover');
+                const file = e.dataTransfer.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    const input = document.getElementById('mainImageInput');
+                    const dt = new DataTransfer();
+                    dt.items.add(file);
+                    input.files = dt.files;
+                    input.dispatchEvent(new Event('change'));
+                }
+            });
+            
+            galleryArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                galleryArea.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length) {
+                    const input = document.getElementById('galleryImageInput');
+                    const dt = new DataTransfer();
+                    for (let file of files) {
+                        if (file.type.startsWith('image/')) {
+                            dt.items.add(file);
+                        }
+                    }
+                    input.files = dt.files;
+                    input.dispatchEvent(new Event('change'));
+                }
+            });
+        }
+
+        // ========== LOAD PROPERTIES ==========
+        async function loadProperties() {
+            try {
+                const url = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${GITHUB_FILE_PATH}?ref=${GITHUB_BRANCH}`;
+                const res = await fetch(url, {
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+                
+                if (!res.ok) throw new Error('Failed to fetch');
+                
+                const data = await res.json();
+                const content = atob(data.content);
+                currentData = JSON.parse(content);
+                
+                renderGrid(currentData);
+            } catch (err) {
+                console.error(err);
+                document.getElementById('propertyGrid').innerHTML = `
+                    <div style="grid-column:1/-1; text-align:center; padding:60px; color:#5A5A5E;">
+                        <p>❌ Failed to load properties. Make sure your GitHub token is correct.</p>
+                        <p style="font-size:0.85rem; margin-top:8px;">Error: ${err.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        function renderGrid(data) {
+            const grid = document.getElementById('propertyGrid');
+            if (!data || data.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column:1/-1; text-align:center; padding:60px; color:#5A5A5E;">
+                        <p>No properties found. Click "Add New Property" to get started.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = data.map((item, idx) => `
+                <div class="property-card">
+                    <img src="${item.image}" alt="${item.title}">
+                    <div class="info">
+                        <h3>${item.title} <span class="${item.status === 'sold' ? 'sold-badge' : 'available-badge'}">${item.status.toUpperCase()}</span></h3>
+                        <div class="price">${item.price}</div>
+                        <div class="location">${item.location}</div>
+                        <div style="font-size:0.85rem; color:#5A5A5E; margin-top:4px;">
+                            🛏 ${item.bedrooms} · 🛁 ${item.bathrooms} · 📐 ${item.sqft} sqft
+                        </div>
+                        <div class="actions">
+                            <button class="edit-btn" onclick="editProperty(${idx})">✏️ Edit</button>
+                            <button class="delete-btn" onclick="deleteProperty(${idx})">🗑️ Delete</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ========== OPEN/EDIT MODAL ==========
+        function openAddModal() {
+            currentEditId = null;
+            mainImageUrl = '';
+            galleryUrls = [];
+            document.getElementById('modalTitle').textContent = 'Add New Property';
+            document.getElementById('propTitle').value = '';
+            document.getElementById('propPrice').value = '';
+            document.getElementById('propLocation').value = '';
+            document.getElementById('propBedrooms').value = '';
+            document.getElementById('propBathrooms').value = '';
+            document.getElementById('propSqft').value = '';
+            document.getElementById('propStatus').value = 'available';
+            document.getElementById('propDescription').value = '';
+            document.getElementById('mainPreview').innerHTML = '';
+            document.getElementById('mainFilename').textContent = 'No file selected';
+            document.getElementById('galleryPreview').innerHTML = '';
+            document.getElementById('galleryFilename').textContent = 'No files selected';
+            document.getElementById('mainImageInput').value = '';
+            document.getElementById('galleryImageInput').value = '';
+            document.getElementById('propertyModal').classList.add('open');
+        }
+
+        function editProperty(index) {
+            const item = currentData[index];
+            currentEditId = index;
+            mainImageUrl = item.image || '';
+            galleryUrls = item.gallery || [];
+            
+            document.getElementById('modalTitle').textContent = 'Edit Property';
+            document.getElementById('propTitle').value = item.title || '';
+            document.getElementById('propPrice').value = item.price || '';
+            document.getElementById('propLocation').value = item.location || '';
+            document.getElementById('propBedrooms').value = item.bedrooms || '';
+            document.getElementById('propBathrooms').value = item.bathrooms || '';
+            document.getElementById('propSqft').value = item.sqft || '';
+            document.getElementById('propStatus').value = item.status || 'available';
+            document.getElementById('propDescription').value = item.description || '';
+            
+            // Show existing main image
+            if (mainImageUrl) {
+                document.getElementById('mainPreview').innerHTML = `<img src="${mainImageUrl}" alt="Main image"><span style="font-size:0.8rem; color:#27ae60;">✅ Existing</span>`;
+                document.getElementById('mainFilename').textContent = '✅ Existing image';
+            } else {
+                document.getElementById('mainPreview').innerHTML = '';
+                document.getElementById('mainFilename').textContent = 'No file selected';
+            }
+            
+            // Show existing gallery
+            const preview = document.getElementById('galleryPreview');
+            preview.innerHTML = '';
+            galleryUrls.forEach(url => {
+                const item = document.createElement('div');
+                item.className = 'gallery-item';
+                item.innerHTML = `
+                    <img src="${url}" alt="Gallery">
+                    <button class="remove-btn" onclick="removeGalleryImage('${url}')">×</button>
+                `;
+                preview.appendChild(item);
+            });
+            document.getElementById('galleryFilename').textContent = `📸 ${galleryUrls.length} images uploaded`;
+            
+            document.getElementById('mainImageInput').value = '';
+            document.getElementById('galleryImageInput').value = '';
+            document.getElementById('propertyModal').classList.add('open');
+        }
+
+        function closeModal() {
+            document.getElementById('propertyModal').classList.remove('open');
+        }
+
+        // ========== SAVE PROPERTY ==========
+        async function saveProperty() {
+            if (!mainImageUrl) {
+                showStatus('❌ Please upload a main image first!', true);
+                return;
+            }
+
+            const newProperty = {
+                id: Date.now(),
+                title: document.getElementById('propTitle').value || 'Untitled Property',
+                price: document.getElementById('propPrice').value || '₦0',
+                location: document.getElementById('propLocation').value || 'Abuja, Nigeria',
+                bedrooms: parseInt(document.getElementById('propBedrooms').value) || 0,
+                bathrooms: parseInt(document.getElementById('propBathrooms').value) || 0,
+                sqft: document.getElementById('propSqft').value || '0',
+                image: mainImageUrl,
+                gallery: galleryUrls,
+                status: document.getElementById('propStatus').value || 'available',
+                description: document.getElementById('propDescription').value || 'A beautiful property in Abuja.'
+            };
+
+            let dataToSave = [...currentData];
+            if (currentEditId !== null && currentEditId < dataToSave.length) {
+                dataToSave[currentEditId] = { ...dataToSave[currentEditId], ...newProperty };
+                dataToSave[currentEditId].id = dataToSave[currentEditId].id || Date.now();
+            } else {
+                dataToSave.push(newProperty);
+            }
+
+            try {
+                const url = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${GITHUB_FILE_PATH}`;
+                const getRes = await fetch(url, {
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+                const fileData = await getRes.json();
+                const sha = fileData.sha;
+
+                const content = btoa(JSON.stringify(dataToSave, null, 2));
+                const putRes = await fetch(url, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: currentEditId !== null ? 'Update property' : 'Add new property',
+                        content: content,
+                        sha: sha,
+                        branch: GITHUB_BRANCH
+                    })
+                });
+
+                if (!putRes.ok) throw new Error('Failed to save');
+                
+                closeModal();
+                showStatus('✅ Property saved successfully!');
+                await loadProperties();
+            } catch (err) {
+                showStatus('❌ Error saving: ' + err.message, true);
+                console.error(err);
+            }
+        }
+
+        // ========== DELETE PROPERTY ==========
+        async function deleteProperty(index) {
+            if (!confirm('Are you sure you want to delete this property?')) return;
+            
+            const dataToSave = [...currentData];
+            dataToSave.splice(index, 1);
+
+            try {
+                const url = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${GITHUB_FILE_PATH}`;
+                const getRes = await fetch(url, {
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+                const fileData = await getRes.json();
+                const sha = fileData.sha;
+
+                const content = btoa(JSON.stringify(dataToSave, null, 2));
+                const putRes = await fetch(url, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: 'Delete property',
+                        content: content,
+                        sha: sha,
+                        branch: GITHUB_BRANCH
+                    })
+                });
+
+                if (!putRes.ok) throw new Error('Failed to delete');
+                
+                showStatus('✅ Property deleted!');
+                await loadProperties();
+            } catch (err) {
+                showStatus('❌ Error deleting: ' + err.message, true);
+                console.error(err);
+            }
+        }
+
+        // ========== INIT ==========
+        document.getElementById('propertyModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        // Setup drag and drop
+        document.addEventListener('DOMContentLoaded', setupDragDrop);
+
+        // Load properties if already logged in
+        if (document.getElementById('dashboard').classList.contains('hidden') === false) {
+            loadProperties();
+        }
+    </script>
 </body>
 </html>
