@@ -38,13 +38,33 @@
         .available-badge { background: #27ae60; color: white; padding: 2px 12px; border-radius: 50px; font-size: 0.7rem; font-weight: 700; display: inline-block; margin-left: 8px; }
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 999; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
         .modal.open { display: flex; }
-        .modal-content { background: white; padding: 32px; border-radius: 20px; max-width: 600px; width: 95%; max-height: 90vh; overflow-y: auto; }
+        .modal-content { background: white; padding: 32px; border-radius: 20px; max-width: 650px; width: 95%; max-height: 90vh; overflow-y: auto; }
         .modal-content h2 { margin-bottom: 20px; }
         .modal-content input, .modal-content textarea, .modal-content select { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; }
         .modal-content textarea { min-height: 80px; }
         .modal-content .btn { width: auto; padding: 12px 32px; }
         .modal-close { float: right; font-size: 2rem; cursor: pointer; color: #999; background: none; border: none; }
         .modal-close:hover { color: #333; }
+        .status-msg { padding: 12px; border-radius: 8px; margin-bottom: 16px; display: none; }
+        .status-msg.success { display: block; background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .status-msg.error { display: block; background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .upload-area { border: 2px dashed #ddd; border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 12px; transition: all 0.3s; cursor: pointer; }
+        .upload-area:hover, .upload-area.dragover { border-color: #C8A254; background: #FCF9F5; }
+        .upload-area .icon { font-size: 2rem; color: #C8A254; }
+        .upload-area p { color: #5A5A5E; margin-top: 4px; font-size: 0.9rem; }
+        .upload-area .filename { color: #1C1C1E; font-weight: 600; margin-top: 4px; }
+        .upload-preview { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+        .upload-preview img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; }
+        .upload-preview .remove-btn { position: relative; margin-left: -20px; margin-top: -8px; background: #e74c3c; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-size: 0.7rem; }
+        .gallery-upload-area { border: 2px dashed #ddd; border-radius: 12px; padding: 16px; text-align: center; margin-bottom: 12px; transition: all 0.3s; cursor: pointer; }
+        .gallery-upload-area:hover, .gallery-upload-area.dragover { border-color: #C8A254; background: #FCF9F5; }
+        .gallery-preview { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+        .gallery-preview .gallery-item { position: relative; }
+        .gallery-preview .gallery-item img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; }
+        .gallery-preview .gallery-item .remove-btn { position: absolute; top: -8px; right: -8px; background: #e74c3c; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-size: 0.7rem; }
+        .upload-progress { width: 100%; height: 4px; background: #eee; border-radius: 4px; margin: 8px 0; display: none; overflow: hidden; }
+        .upload-progress .bar { height: 100%; background: #C8A254; width: 0%; border-radius: 4px; transition: width 0.3s; }
+        .upload-progress.active { display: block; }
         @media (max-width: 768px) { .dashboard-header { flex-direction: column; align-items: stretch; } }
     </style>
 </head>
@@ -65,6 +85,7 @@
             <h2>🏠 Property Manager</h2>
             <button class="add-btn" onclick="openAddModal()">+ Add New Property</button>
         </div>
+        <div id="statusMsg" class="status-msg"></div>
         <div id="propertyGrid" class="property-grid"></div>
     </div>
 
@@ -73,31 +94,70 @@
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal()">&times;</button>
             <h2 id="modalTitle">Add Property</h2>
+            
             <input type="text" id="propTitle" placeholder="Title (e.g., Modern Villa in Maitama)">
             <input type="text" id="propPrice" placeholder="Price (e.g., ₦450,000,000)">
             <input type="text" id="propLocation" placeholder="Location (e.g., 12 Lake Chad Crescent, Maitama)">
             <input type="number" id="propBedrooms" placeholder="Bedrooms">
             <input type="number" id="propBathrooms" placeholder="Bathrooms">
             <input type="text" id="propSqft" placeholder="Square Feet (e.g., 4,200)">
-            <input type="text" id="propImage" placeholder="Main Image URL (e.g., https://...jpg)">
-            <input type="text" id="propGallery" placeholder="Gallery Images (comma separated URLs)">
+            
+            <!-- MAIN IMAGE UPLOAD -->
+            <div style="margin-bottom: 12px;">
+                <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 4px;">Main Image</label>
+                <div class="upload-area" id="mainUploadArea" onclick="document.getElementById('mainImageInput').click()">
+                    <div class="icon">📸</div>
+                    <p>Click or drag & drop to upload main image</p>
+                    <div class="filename" id="mainFilename">No file selected</div>
+                </div>
+                <input type="file" id="mainImageInput" accept="image/*" style="display:none" onchange="handleMainImageUpload(event)">
+                <div id="mainPreview" class="upload-preview"></div>
+                <div class="upload-progress" id="mainProgress"><div class="bar" id="mainProgressBar"></div></div>
+            </div>
+            
+            <!-- GALLERY IMAGES UPLOAD -->
+            <div style="margin-bottom: 12px;">
+                <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 4px;">Inside Tour Gallery</label>
+                <div class="gallery-upload-area" id="galleryUploadArea" onclick="document.getElementById('galleryImageInput').click()">
+                    <div class="icon">🖼️</div>
+                    <p>Click or drag & drop to upload multiple images</p>
+                    <div class="filename" id="galleryFilename">No files selected</div>
+                </div>
+                <input type="file" id="galleryImageInput" accept="image/*" multiple style="display:none" onchange="handleGalleryUpload(event)">
+                <div id="galleryPreview" class="gallery-preview"></div>
+                <div class="upload-progress" id="galleryProgress"><div class="bar" id="galleryProgressBar"></div></div>
+            </div>
+            
             <select id="propStatus">
                 <option value="available">Available</option>
                 <option value="sold">Sold</option>
             </select>
             <textarea id="propDescription" placeholder="Description"></textarea>
+            
             <button class="btn" onclick="saveProperty()">Save Property</button>
         </div>
     </div>
 
     <script>
         // =========================================
-        // THE PASSWORD - Change this to whatever you want!
+        // CONFIGURATION - EDIT THESE!
         // =========================================
         const ADMIN_PASSWORD = "alexis2026";
+        
+        // GitHub Repo Info - CHANGE THESE!
+        const GITHUB_USERNAME = "Princess Alexis"; // <--- PUT YOUR USERNAME HERE
+        const GITHUB_REPO = "alexis-realty";
+        const GITHUB_FILE_PATH = "listings.json";
+        const GITHUB_BRANCH = "main";
+        
+        // GitHub Personal Access Token - CHANGE THIS!
+        const GITHUB_TOKEN = "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"; // <--- PUT YOUR TOKEN HERE
         // =========================================
 
         let currentEditId = null;
+        let currentData = [];
+        let mainImageUrl = '';
+        let galleryUrls = [];
 
         function checkPassword() {
             const input = document.getElementById('passwordInput');
@@ -113,41 +173,253 @@
             }
         }
 
-        function loadProperties() {
-            fetch('listings.json')
-                .then(res => res.json())
-                .then(data => {
-                    const grid = document.getElementById('propertyGrid');
-                    grid.innerHTML = data.map((item, index) => `
-                        <div class="property-card">
-                            <img src="${item.image}" alt="${item.title}">
-                            <div class="info">
-                                <h3>${item.title} <span class="${item.status === 'sold' ? 'sold-badge' : 'available-badge'}">${item.status.toUpperCase()}</span></h3>
-                                <div class="price">${item.price}</div>
-                                <div class="location">${item.location}</div>
-                                <div style="font-size:0.85rem; color:#5A5A5E; margin-top:4px;">
-                                    🛏 ${item.bedrooms} · 🛁 ${item.bathrooms} · 📐 ${item.sqft} sqft
-                                </div>
-                                <div class="actions">
-                                    <button class="edit-btn" onclick="editProperty(${index})">✏️ Edit</button>
-                                    <button class="delete-btn" onclick="deleteProperty(${index})">🗑️ Delete</button>
-                                </div>
-                            </div>
-                        </div>
-                    `).join('');
-                })
-                .catch(() => {
-                    document.getElementById('propertyGrid').innerHTML = `
-                        <div style="grid-column:1/-1; text-align:center; padding:60px; color:#5A5A5E;">
-                            <p>No properties found. Click "Add New Property" to get started.</p>
-                            <p style="font-size:0.85rem; margin-top:8px;">Make sure <strong>listings.json</strong> exists in your repository.</p>
-                        </div>
-                    `;
-                });
+        function showStatus(msg, isError = false) {
+            const el = document.getElementById('statusMsg');
+            el.textContent = msg;
+            el.className = 'status-msg ' + (isError ? 'error' : 'success');
+            el.style.display = 'block';
+            setTimeout(() => { el.style.display = 'none'; }, 5000);
         }
 
+        // ========== IMAGE UPLOAD TO GITHUB ==========
+        async function uploadImageToGitHub(file, folder = 'images') {
+            const timestamp = Date.now();
+            const filename = `${folder}/${timestamp}_${file.name.replace(/\s/g, '_')}`;
+            
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = async function(e) {
+                    try {
+                        const base64 = e.target.result.split(',')[1];
+                        
+                        const url = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${filename}`;
+                        const response = await fetch(url, {
+                            method: 'PUT',
+                            headers: {
+                                'Authorization': `token ${GITHUB_TOKEN}`,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                message: `Upload image: ${file.name}`,
+                                content: base64,
+                                branch: GITHUB_BRANCH
+                            })
+                        });
+                        
+                        if (!response.ok) {
+                            const errorData = await response.json();
+                            throw new Error(errorData.message || 'Upload failed');
+                        }
+                        
+                        const data = await response.json();
+                        const imageUrl = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/${GITHUB_BRANCH}/${filename}`;
+                        resolve(imageUrl);
+                    } catch (err) {
+                        reject(err);
+                    }
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // ========== MAIN IMAGE UPLOAD HANDLER ==========
+        async function handleMainImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            document.getElementById('mainFilename').textContent = '📤 Uploading...';
+            document.getElementById('mainProgress').classList.add('active');
+            document.getElementById('mainProgressBar').style.width = '30%';
+            
+            try {
+                const url = await uploadImageToGitHub(file, 'main');
+                mainImageUrl = url;
+                document.getElementById('mainProgressBar').style.width = '100%';
+                
+                const preview = document.getElementById('mainPreview');
+                preview.innerHTML = `<img src="${url}" alt="Main image"><span style="font-size:0.8rem; color:#27ae60;">✅ Uploaded</span>`;
+                document.getElementById('mainFilename').textContent = `✅ ${file.name}`;
+                
+                setTimeout(() => {
+                    document.getElementById('mainProgress').classList.remove('active');
+                    document.getElementById('mainProgressBar').style.width = '0%';
+                }, 500);
+            } catch (err) {
+                showStatus('❌ Main image upload failed: ' + err.message, true);
+                document.getElementById('mainFilename').textContent = '❌ Upload failed';
+                document.getElementById('mainProgress').classList.remove('active');
+            }
+        }
+
+        // ========== GALLERY IMAGES UPLOAD HANDLER ==========
+        async function handleGalleryUpload(event) {
+            const files = event.target.files;
+            if (!files.length) return;
+            
+            document.getElementById('galleryFilename').textContent = `📤 Uploading ${files.length} images...`;
+            document.getElementById('galleryProgress').classList.add('active');
+            
+            let uploaded = 0;
+            const total = files.length;
+            
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                try {
+                    document.getElementById('galleryProgressBar').style.width = `${((i) / total) * 100}%`;
+                    const url = await uploadImageToGitHub(file, 'gallery');
+                    galleryUrls.push(url);
+                    
+                    const preview = document.getElementById('galleryPreview');
+                    const item = document.createElement('div');
+                    item.className = 'gallery-item';
+                    item.innerHTML = `
+                        <img src="${url}" alt="Gallery">
+                        <button class="remove-btn" onclick="removeGalleryImage('${url}')">×</button>
+                    `;
+                    preview.appendChild(item);
+                    
+                    uploaded++;
+                    document.getElementById('galleryProgressBar').style.width = `${((i + 1) / total) * 100}%`;
+                } catch (err) {
+                    showStatus(`❌ Failed to upload ${file.name}: ${err.message}`, true);
+                }
+            }
+            
+            document.getElementById('galleryProgressBar').style.width = '100%';
+            document.getElementById('galleryFilename').textContent = `✅ ${uploaded} images uploaded`;
+            
+            setTimeout(() => {
+                document.getElementById('galleryProgress').classList.remove('active');
+                document.getElementById('galleryProgressBar').style.width = '0%';
+            }, 500);
+            
+            event.target.value = '';
+        }
+
+        function removeGalleryImage(url) {
+            galleryUrls = galleryUrls.filter(u => u !== url);
+            const preview = document.getElementById('galleryPreview');
+            const items = preview.querySelectorAll('.gallery-item');
+            items.forEach(item => {
+                const img = item.querySelector('img');
+                if (img && img.src === url) {
+                    item.remove();
+                }
+            });
+            document.getElementById('galleryFilename').textContent = `📸 ${galleryUrls.length} images uploaded`;
+        }
+
+        // ========== DRAG AND DROP SUPPORT ==========
+        function setupDragDrop() {
+            const mainArea = document.getElementById('mainUploadArea');
+            const galleryArea = document.getElementById('galleryUploadArea');
+            
+            [mainArea, galleryArea].forEach(area => {
+                area.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    area.classList.add('dragover');
+                });
+                area.addEventListener('dragleave', () => {
+                    area.classList.remove('dragover');
+                });
+            });
+            
+            mainArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                mainArea.classList.remove('dragover');
+                const file = e.dataTransfer.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    const input = document.getElementById('mainImageInput');
+                    const dt = new DataTransfer();
+                    dt.items.add(file);
+                    input.files = dt.files;
+                    input.dispatchEvent(new Event('change'));
+                }
+            });
+            
+            galleryArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                galleryArea.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length) {
+                    const input = document.getElementById('galleryImageInput');
+                    const dt = new DataTransfer();
+                    for (let file of files) {
+                        if (file.type.startsWith('image/')) {
+                            dt.items.add(file);
+                        }
+                    }
+                    input.files = dt.files;
+                    input.dispatchEvent(new Event('change'));
+                }
+            });
+        }
+
+        // ========== LOAD PROPERTIES ==========
+        async function loadProperties() {
+            try {
+                const url = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${GITHUB_FILE_PATH}?ref=${GITHUB_BRANCH}`;
+                const res = await fetch(url, {
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+                
+                if (!res.ok) throw new Error('Failed to fetch');
+                
+                const data = await res.json();
+                const content = atob(data.content);
+                currentData = JSON.parse(content);
+                
+                renderGrid(currentData);
+            } catch (err) {
+                console.error(err);
+                document.getElementById('propertyGrid').innerHTML = `
+                    <div style="grid-column:1/-1; text-align:center; padding:60px; color:#5A5A5E;">
+                        <p>❌ Failed to load properties. Make sure your GitHub token is correct.</p>
+                        <p style="font-size:0.85rem; margin-top:8px;">Error: ${err.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        function renderGrid(data) {
+            const grid = document.getElementById('propertyGrid');
+            if (!data || data.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column:1/-1; text-align:center; padding:60px; color:#5A5A5E;">
+                        <p>No properties found. Click "Add New Property" to get started.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = data.map((item, idx) => `
+                <div class="property-card">
+                    <img src="${item.image}" alt="${item.title}">
+                    <div class="info">
+                        <h3>${item.title} <span class="${item.status === 'sold' ? 'sold-badge' : 'available-badge'}">${item.status.toUpperCase()}</span></h3>
+                        <div class="price">${item.price}</div>
+                        <div class="location">${item.location}</div>
+                        <div style="font-size:0.85rem; color:#5A5A5E; margin-top:4px;">
+                            🛏 ${item.bedrooms} · 🛁 ${item.bathrooms} · 📐 ${item.sqft} sqft
+                        </div>
+                        <div class="actions">
+                            <button class="edit-btn" onclick="editProperty(${idx})">✏️ Edit</button>
+                            <button class="delete-btn" onclick="deleteProperty(${idx})">🗑️ Delete</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ========== OPEN/EDIT MODAL ==========
         function openAddModal() {
             currentEditId = null;
+            mainImageUrl = '';
+            galleryUrls = [];
             document.getElementById('modalTitle').textContent = 'Add New Property';
             document.getElementById('propTitle').value = '';
             document.getElementById('propPrice').value = '';
@@ -155,39 +427,70 @@
             document.getElementById('propBedrooms').value = '';
             document.getElementById('propBathrooms').value = '';
             document.getElementById('propSqft').value = '';
-            document.getElementById('propImage').value = '';
-            document.getElementById('propGallery').value = '';
             document.getElementById('propStatus').value = 'available';
             document.getElementById('propDescription').value = '';
+            document.getElementById('mainPreview').innerHTML = '';
+            document.getElementById('mainFilename').textContent = 'No file selected';
+            document.getElementById('galleryPreview').innerHTML = '';
+            document.getElementById('galleryFilename').textContent = 'No files selected';
+            document.getElementById('mainImageInput').value = '';
+            document.getElementById('galleryImageInput').value = '';
             document.getElementById('propertyModal').classList.add('open');
         }
 
         function editProperty(index) {
-            fetch('listings.json')
-                .then(res => res.json())
-                .then(data => {
-                    const item = data[index];
-                    currentEditId = index;
-                    document.getElementById('modalTitle').textContent = 'Edit Property';
-                    document.getElementById('propTitle').value = item.title || '';
-                    document.getElementById('propPrice').value = item.price || '';
-                    document.getElementById('propLocation').value = item.location || '';
-                    document.getElementById('propBedrooms').value = item.bedrooms || '';
-                    document.getElementById('propBathrooms').value = item.bathrooms || '';
-                    document.getElementById('propSqft').value = item.sqft || '';
-                    document.getElementById('propImage').value = item.image || '';
-                    document.getElementById('propGallery').value = (item.gallery || []).join(', ');
-                    document.getElementById('propStatus').value = item.status || 'available';
-                    document.getElementById('propDescription').value = item.description || '';
-                    document.getElementById('propertyModal').classList.add('open');
-                });
+            const item = currentData[index];
+            currentEditId = index;
+            mainImageUrl = item.image || '';
+            galleryUrls = item.gallery || [];
+            
+            document.getElementById('modalTitle').textContent = 'Edit Property';
+            document.getElementById('propTitle').value = item.title || '';
+            document.getElementById('propPrice').value = item.price || '';
+            document.getElementById('propLocation').value = item.location || '';
+            document.getElementById('propBedrooms').value = item.bedrooms || '';
+            document.getElementById('propBathrooms').value = item.bathrooms || '';
+            document.getElementById('propSqft').value = item.sqft || '';
+            document.getElementById('propStatus').value = item.status || 'available';
+            document.getElementById('propDescription').value = item.description || '';
+            
+            if (mainImageUrl) {
+                document.getElementById('mainPreview').innerHTML = `<img src="${mainImageUrl}" alt="Main image"><span style="font-size:0.8rem; color:#27ae60;">✅ Existing</span>`;
+                document.getElementById('mainFilename').textContent = '✅ Existing image';
+            } else {
+                document.getElementById('mainPreview').innerHTML = '';
+                document.getElementById('mainFilename').textContent = 'No file selected';
+            }
+            
+            const preview = document.getElementById('galleryPreview');
+            preview.innerHTML = '';
+            galleryUrls.forEach(url => {
+                const item = document.createElement('div');
+                item.className = 'gallery-item';
+                item.innerHTML = `
+                    <img src="${url}" alt="Gallery">
+                    <button class="remove-btn" onclick="removeGalleryImage('${url}')">×</button>
+                `;
+                preview.appendChild(item);
+            });
+            document.getElementById('galleryFilename').textContent = `📸 ${galleryUrls.length} images uploaded`;
+            
+            document.getElementById('mainImageInput').value = '';
+            document.getElementById('galleryImageInput').value = '';
+            document.getElementById('propertyModal').classList.add('open');
         }
 
         function closeModal() {
             document.getElementById('propertyModal').classList.remove('open');
         }
 
-        function saveProperty() {
+        // ========== SAVE PROPERTY ==========
+        async function saveProperty() {
+            if (!mainImageUrl) {
+                showStatus('❌ Please upload a main image first!', true);
+                return;
+            }
+
             const newProperty = {
                 id: Date.now(),
                 title: document.getElementById('propTitle').value || 'Untitled Property',
@@ -196,76 +499,110 @@
                 bedrooms: parseInt(document.getElementById('propBedrooms').value) || 0,
                 bathrooms: parseInt(document.getElementById('propBathrooms').value) || 0,
                 sqft: document.getElementById('propSqft').value || '0',
-                image: document.getElementById('propImage').value || 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&q=80',
-                gallery: document.getElementById('propGallery').value.split(',').map(s => s.trim()).filter(s => s),
+                image: mainImageUrl,
+                gallery: galleryUrls,
                 status: document.getElementById('propStatus').value || 'available',
                 description: document.getElementById('propDescription').value || 'A beautiful property in Abuja.'
             };
 
-            fetch('listings.json')
-                .then(res => res.json())
-                .then(data => {
-                    if (currentEditId !== null && currentEditId < data.length) {
-                        // Edit existing
-                        data[currentEditId] = { ...data[currentEditId], ...newProperty };
-                        // Preserve the original ID
-                        data[currentEditId].id = data[currentEditId].id || Date.now();
-                    } else {
-                        // Add new
-                        data.push(newProperty);
+            let dataToSave = [...currentData];
+            if (currentEditId !== null && currentEditId < dataToSave.length) {
+                dataToSave[currentEditId] = { ...dataToSave[currentEditId], ...newProperty };
+                dataToSave[currentEditId].id = dataToSave[currentEditId].id || Date.now();
+            } else {
+                dataToSave.push(newProperty);
+            }
+
+            try {
+                const url = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${GITHUB_FILE_PATH}`;
+                const getRes = await fetch(url, {
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`,
+                        'Accept': 'application/vnd.github.v3+json'
                     }
-                    
-                    // Save back to listings.json
-                    return fetch('listings.json', {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(data, null, 2)
-                    });
-                })
-                .then(() => {
-                    closeModal();
-                    loadProperties();
-                    alert('✅ Property saved successfully!');
-                })
-                .catch(err => {
-                    alert('❌ Error saving. Make sure you have write permissions to listings.json.');
-                    console.error(err);
                 });
+                const fileData = await getRes.json();
+                const sha = fileData.sha;
+
+                const content = btoa(JSON.stringify(dataToSave, null, 2));
+                const putRes = await fetch(url, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: currentEditId !== null ? 'Update property' : 'Add new property',
+                        content: content,
+                        sha: sha,
+                        branch: GITHUB_BRANCH
+                    })
+                });
+
+                if (!putRes.ok) throw new Error('Failed to save');
+                
+                closeModal();
+                showStatus('✅ Property saved successfully!');
+                await loadProperties();
+            } catch (err) {
+                showStatus('❌ Error saving: ' + err.message, true);
+                console.error(err);
+            }
         }
 
-        function deleteProperty(index) {
+        // ========== DELETE PROPERTY ==========
+        async function deleteProperty(index) {
             if (!confirm('Are you sure you want to delete this property?')) return;
             
-            fetch('listings.json')
-                .then(res => res.json())
-                .then(data => {
-                    data.splice(index, 1);
-                    return fetch('listings.json', {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(data, null, 2)
-                    });
-                })
-                .then(() => {
-                    loadProperties();
-                    alert('✅ Property deleted!');
-                })
-                .catch(err => {
-                    alert('❌ Error deleting. Make sure you have write permissions.');
-                    console.error(err);
+            const dataToSave = [...currentData];
+            dataToSave.splice(index, 1);
+
+            try {
+                const url = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${GITHUB_FILE_PATH}`;
+                const getRes = await fetch(url, {
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
                 });
+                const fileData = await getRes.json();
+                const sha = fileData.sha;
+
+                const content = btoa(JSON.stringify(dataToSave, null, 2));
+                const putRes = await fetch(url, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: 'Delete property',
+                        content: content,
+                        sha: sha,
+                        branch: GITHUB_BRANCH
+                    })
+                });
+
+                if (!putRes.ok) throw new Error('Failed to delete');
+                
+                showStatus('✅ Property deleted!');
+                await loadProperties();
+            } catch (err) {
+                showStatus('❌ Error deleting: ' + err.message, true);
+                console.error(err);
+            }
         }
 
-        // Close modal on outside click
+        // ========== INIT ==========
         document.getElementById('propertyModal').addEventListener('click', function(e) {
             if (e.target === this) closeModal();
         });
 
-        // Load properties if already logged in
+        document.addEventListener('DOMContentLoaded', setupDragDrop);
+
         if (document.getElementById('dashboard').classList.contains('hidden') === false) {
             loadProperties();
         }
     </script>
-
 </body>
 </html>
